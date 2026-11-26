@@ -57,7 +57,7 @@
   <!-- Route-safe clearance: 0.30 m robot radius + 0.22 m TEB minimum
        obstacle distance. Frontier cells themselves may be closer; the node
        publishes a safe approach point instead of the boundary cell. -->
-  <arg name="clearance" default="0.35"/>
+  <arg name="clearance" default="0.45"/>
   <!-- Must match TebLocalPlannerROS/xy_goal_tolerance. Portal endpoints are
        positioned beyond this success circle, so a TEB SUCCEEDED terminal is
        still provably on the destination side of the door. Keeping the value
@@ -98,7 +98,7 @@
   <arg name="portal_authentication_retry_cooldown" default="5.0"/>
   <arg name="room_view_core_deg" default="45.0"/>
   <arg name="room_view_arc_deg" default="90.0"/>
-  <arg name="room_view_min_depth" default="-0.2"/>
+  <arg name="room_view_min_depth" default="-0.15"/>
   <!-- A zero-information endpoint that stays gainless this long is a dead
        end; fail its region and force a different obligation instead of
        retaining the route until a terminal that may never arrive. -->
@@ -145,15 +145,15 @@
        A dormant region stays excluded for this SLAM invocation: boundary
        jitter alone is not valid evidence that a room became unexplored again. -->
   <arg name="region_memory_radius" default="2.5"/>
-  <arg name="region_information_delta" default="24"/>
+  <arg name="region_information_delta" default="8"/>
   <!-- This is a no-information dwell bound, not a route timeout. The normal
        active/stall watchdog still owns blocked or non-executable paths. -->
   <arg name="region_stagnation_timeout" default="12.0"/>
   <arg name="region_failure_limit" default="2"/>
-  <arg name="info_radius_cells" default="16"/>
-  <arg name="structure_radius_cells" default="16"/>
+  <arg name="info_radius_cells" default="8"/>
+  <arg name="structure_radius_cells" default="10"/>
   <arg name="structure_weight" default="0.16"/>
-  <arg name="min_structure_cells" default="5"/>
+  <arg name="min_structure_cells" default="3"/>
   <!-- Soft preference for candidates near the robot's current heading.
        Larger values reduce abrupt branch U-turns; zero restores the old
        information/structure/path-only score. -->
@@ -165,8 +165,8 @@
        exceed the heading bound and be entered after an in-place pre-route turn.
        The score gate keeps low-value rooms behind the same bound. -->
   <arg name="heading_semantic_override_enabled" default="true"/>
-  <arg name="heading_semantic_override_min_score" default="0.15"/>
-  <arg name="heading_semantic_override_min_margin" default="0.40"/>
+  <arg name="heading_semantic_override_min_score" default="0.06"/>
+  <arg name="heading_semantic_override_min_margin" default="0.20"/>
   <arg name="room_turn_soft_limit_deg" default="60.0"/>
   <arg name="room_view_settle_seconds" default="1.0"/>
   <arg name="heading_semantic_override_max_attempts" default="2"/>
@@ -192,7 +192,7 @@
        unknown remains within dead_end_unknown_cells of the frontier cell, the
        route ends at a resolved wall.  Mark it inspected and pick a passage. -->
   <arg name="dead_end_check_distance" default="4.0"/>
-  <arg name="dead_end_unknown_cells" default="30"/>
+  <arg name="dead_end_unknown_cells" default="15"/>
   <!-- Do not rebuild the expensive map/costmap BFS while a healthy active
        route is far from its frontier. Near-endpoint and stall checks wake it
        immediately. -->
@@ -211,9 +211,9 @@
     <param name="angularUpdate" value="0.15"/>
     <param name="maxUrange" value="10.0"/>
     <!-- real_lab.world occupies roughly x=[-11.7, 37.8], y=[-9.1, 21.0]
-         with 0.85-0.90 m single doors. Use 5 cm cells so narrow doors stay
-         16-18 cells wide after SLAM quantization. -->
-    <param name="delta" value="0.05"/>
+         with 1.80 m doors and ~650 m^2 free area. Use 10 cm global cells
+         for fast Python BFS while keeping 5 cm local costmap resolution. -->
+    <param name="delta" value="0.10"/>
     <param name="xmin" value="$(arg map_xmin)"/>
     <param name="xmax" value="$(arg map_xmax)"/>
     <param name="ymin" value="$(arg map_ymin)"/>

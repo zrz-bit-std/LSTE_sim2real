@@ -49,6 +49,10 @@ _ALIASES = {
     "folder": "folder",
     "cans": "can",
     "can": "can",
+    "shelves": "bookshelf",
+    "shelf": "bookshelf",
+    "lamps": "lamp",
+    "plants": "plant",
 }
 
 _STOPWORDS = frozenset(

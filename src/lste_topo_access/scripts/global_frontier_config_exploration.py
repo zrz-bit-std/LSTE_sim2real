@@ -125,7 +125,7 @@ class GlobalFrontierExplorationConfigurationMixin:
         # office furnishing are ignored only while constructing the separate
         # place map; Navfn, costmaps, and TEB still receive the raw obstacle.
         self.place_furniture_max_span_m = max(
-            0.25, float(gp("~place_furniture_max_span_m", 2.5))
+            0.25, float(gp("~place_furniture_max_span_m", 3.6))
         )
         # A lidar max-range frontier in an empty open area is often just the
         # edge of a scan, not an entrance worth searching. Doorways, corridor

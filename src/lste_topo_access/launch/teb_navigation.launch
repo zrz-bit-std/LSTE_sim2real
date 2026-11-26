@@ -5,7 +5,7 @@
        move_base and the final-goal bridge. -->
   <arg name="scan_topic" default="/pro3/rlscan"/>
   <!-- Optional raw-cloud obstacle layer, independent of the GP/SLAM scan. -->
-  <arg name="body_cloud_obstacles" default="$(optenv LSTE_BODY_CLOUD_OBSTACLES false)"/>
+  <arg name="body_cloud_obstacles" default="$(optenv LSTE_BODY_CLOUD_OBSTACLES true)"/>
   <arg name="body_cloud_topic" default="/pro3/os_cloud_node/points"/>
   <arg name="odom_topic" default="/pro3/wheel_odom"/>
   <arg name="global_frame" default="map"/>

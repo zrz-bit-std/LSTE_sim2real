@@ -41,7 +41,7 @@ global_costmap:
       obstacle_range: 8.0
       raytrace_range: 10.0
   inflation_layer:
-    inflation_radius: 0.70
+    inflation_radius: 0.45
     cost_scaling_factor: 5.0
 local_costmap:
   plugins:
@@ -74,5 +74,5 @@ local_costmap:
       obstacle_range: 8.0
       raytrace_range: 10.0
   inflation_layer:
-    inflation_radius: 0.55
+    inflation_radius: 0.40
     cost_scaling_factor: 3.0

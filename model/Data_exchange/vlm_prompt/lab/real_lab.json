@@ -1,0 +1,64 @@
+{
+  "task_parsed": {
+    "target": {
+      "name": "yellow cup",
+      "attributes": [
+        "yellow",
+        "ceramic",
+        "cylindrical drinking cup",
+        "handle on the side",
+        "small bright yellow mug placed near the front edge of a wooden conference table"
+      ],
+      "typical_locations": [
+        "wooden conference tables",
+        "laboratory office desks",
+        "workstations with monitors and chairs",
+        "between a black table lamp and a green potted plant"
+      ]
+    },
+    "env": {
+      "env_type_prior": [
+        "laboratory office",
+        "research workspace",
+        "conference workstation room"
+      ],
+      "layout_prior": [
+        "wooden conference tables or office desks arranged flush against room walls",
+        "computer monitors and office chairs at workstations",
+        "bookshelves and cabinets along room walls",
+        "a black table lamp and a green potted plant flanking the target workstation"
+      ],
+      "related_structures": [
+        "desk",
+        "conference table",
+        "monitor",
+        "chair",
+        "bookshelf"
+      ]
+    },
+    "obj_related": {
+      "key_objects": [
+        "desk",
+        "monitor",
+        "chair",
+        "bookshelf",
+        "file folder",
+        "table lamp",
+        "plant"
+      ],
+      "search_strategy": "pass quickly through corridors containing fire hydrants, construction cones, and fire extinguishers; skip storage warehouses containing ladders, cardboard boxes, and storage racks; enter office rooms with desks, monitors, chairs, and bookshelves, leave decoy offices that lack a table lamp and plant pair, and approach the yellow cup located between a table lamp and a potted plant",
+      "negative_clues": [
+        "fire hydrant",
+        "construction cone",
+        "fire extinguisher",
+        "ladder",
+        "cardboard box",
+        "storage rack"
+      ]
+    },
+    "target_ctx": {
+      "left": "table lamp",
+      "right": "plant"
+    }
+  }
+}

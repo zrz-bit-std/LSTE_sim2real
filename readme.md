@@ -24,21 +24,21 @@
 
 - **全图包围盒**：`x ∈ [-11.66, 37.75]`（**49.41 m**），`y ∈ [-9.05, 21.00]`（**30.05 m**）
 - **走廊净宽**：南走廊 `1.77 m`（默认出生点所在）、西/东走廊 `1.79 m`、北走廊 `1.80 m`、中轴连通走廊 `3.09 m`
-- **房间与门洞**：
-  - **北侧**：`N1`（`6.70 × 7.74 m`，门宽 `0.90 m`）、`N23`（`10.55 × 7.74 m`，门宽 `0.90 m`）
-  - **南侧**：`S1`（`3.60 × 4.17 m`，门宽 `0.90 m`）、`S23`（`8.45 × 7.81 m`，门宽 **`0.85 m`**）、`S4`（`4.60 × 7.81 m`，门宽 `1.40 m`）
-  - **西侧**：`W`（`9.93 × 11.68 m`，门宽 `1.515 m`）
-  - **东侧**：`E12`（`9.94 × 10.48 m`，开口 `1.735 m`）、`E3`（`9.94 × 6.04 m`，开口 `1.80 m`）
+- **房间与门洞**（已全部统一为 **`1.80 m`** 门宽、`0.50 m` 门道深，并配置了办公/仓库/走廊真实家具与目标）：
+  - **北侧**：`N1`（空房对照）、`N23`（诱导办公房）
+  - **南侧**：`S1`（负分小仓库）、`S23`（诱导办公房）、`S4`（空房对照）
+  - **西侧**：`W`（负分大仓库）
+  - **东侧**：`E12`（负分仓库）、`E3`（**目标办公房**，含 `cup_yellow` + `lamp_table_metal` + `plant_2`）
 
 ---
 
 ## 2. 针对 `real_lab` 的 Sim2Real 适配
 
-为匹配真实楼层“**窄单开门（`0.85–0.90 m`）+ 薄墙（`0.15 m`）+ 窄环廊（`1.77–1.80 m`）+ 大范围全图（`49.4 × 30.1 m`）**”的物理约束，对全链路导航与拓扑参数做了对齐：
+为匹配真实楼层“**`1.80 m` 统一门洞（`0.50 m` 门道深）+ 环廊（`1.77–1.80 m`）+ 走廊/仓库低矮障碍（`0.23–0.38 m`）+ 大范围全图（`49.4 × 30.1 m`）**”的物理约束，对全链路感知、建图、导航与拓扑参数做了对齐：
 
-- **全图 SLAM 边界与 5 cm 分辨率**（`src/lste_topo_access/launch/online_slam_frontier.launch`）：`gmapping` 范围扩展至 `x ∈ [-14, 40]`、`y ∈ [-11, 23]`，栅格分辨率与局部代价地图均细化为 **`0.05 m`**，确保 `0.85 m` 单开门量化后仍保留 16–17 格自由通道。
-- **物理净空链对齐 Pro3 实车尺度**（`src/lste_topo_access/launch/teb_navigation.launch`、`scripts/config/pipeline_defaults.yaml`）：依据 `pro3` `0.35 × 0.35 m` 碰撞箱将 `robot_radius` 设为 **`0.25 m`**、`TEB min_obstacle_dist` 设为 **`0.10 m`**、规划净空 `clearance` 设为 **`0.35 m`**（对应最小可通行门宽 `0.70 m < 0.85 m`），并同步收紧代价地图膨胀与走廊减速区间（`< 0.885 m` 走廊半宽），避免在 `1.77 m` 走廊内全程限速或门口刹死。
-- **薄墙与窄门拓扑判据**（`src/lste_topo_access/scripts/gp_exploration_tree.py`、`pipeline_defaults.yaml`）：修复 `width/2 - required_depth` 在 `0.85 m` 窄门下过门横向容差坍缩的缺陷；将 `completed_radius` 收紧为 `0.95 m`、`room_view_min_depth` 调为 `-0.2 m`、`MUX_GOVERNOR_MIN_GAP` 调为 `0.30 m`。
+- **全图 SLAM 边界与双分辨率代价地图**（`online_slam_frontier.launch`、`teb_navigation.launch`）：`gmapping` 范围扩展至 `x ∈ [-14, 40]`、`y ∈ [-11, 23]`，全局建图保持 `0.10 m` 以确保大地图下 BFS 实时性，局部滚动代价地图细化为 **`0.05 m`**。
+- **低矮障碍感知与 3D 体素避障**（`lste_pro3_to_scan.launch`、`teb_navigation.launch`、`body_cloud_costmap.yaml`）：将 2D 切片下限下调至 `-0.63` 并默认启用 `body_cloud_obstacles`（`0.03–0.70 m`），避免漏检走廊矮消防栓/锥桶与仓库矮箱。
+- **物理净空链与语义门控**（`pipeline_defaults.yaml`、`global_frontier_semantic_belief.py`）：`robot_radius = 0.25 m`、`TEB min_obstacle_dist = 0.10 m`、`clearance = 0.45 m`、`completed_radius = 0.95 m`、`room_view_min_depth = -0.15 m`、`MUX_GOVERNOR_MIN_GAP = 0.30 m`；并针对 `real_lab.json`（7 正向词 + 6 负向线索）将语义门控下调至 `0.06 / 0.20`。
 
 ---
 
@@ -73,10 +73,10 @@
 
 ```yaml
 WORLD: worlds/sim2real/real_lab.world
-TASK_JSON: model/Data_exchange/vlm_prompt/lab/yellow_cup.json
-TASK_ID: yellow_cup
+TASK_JSON: model/Data_exchange/vlm_prompt/lab/real_lab.json
+TASK_ID: real_lab
 
-PRO3_SPAWN_X: 3.4
+PRO3_SPAWN_X: 5.2
 PRO3_SPAWN_Y: 0
 PRO3_SPAWN_Z: 0.1
 PRO3_SPAWN_YAW: 0

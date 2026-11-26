@@ -5,14 +5,14 @@
 # Simulation world and task. Change all three together when evaluating another
 # scene/task. TASK_ID must exist in TASK_JSON.
 WORLD: worlds/sim2real/real_lab.world
-TASK_JSON: model/Data_exchange/vlm_prompt/lab/yellow_cup.json
-TASK_ID: yellow_cup
+TASK_JSON: model/Data_exchange/vlm_prompt/lab/real_lab.json
+TASK_ID: real_lab
 
 # Initial Pro3 pose when its model is spawned. X/Y/Z use Gazebo world metres;
 # YAW is radians, counter-clockwise about +Z. The default yaw (+pi/2) makes the
 # Pro3 forward axis face the world +Y direction. Edit these four values before
 # starting the robot; an already-spawned robot keeps its existing pose.
-PRO3_SPAWN_X: 3.4
+PRO3_SPAWN_X: 5.2
 PRO3_SPAWN_Y: 0
 PRO3_SPAWN_Z: 0.1
 PRO3_SPAWN_YAW: 0
@@ -391,7 +391,7 @@ GLOBAL_FRONTIER_PREEMPT_CONTEXT: false
 # robot radius (0.30 m) plus TEB's minimum obstacle distance (0.22 m), with an
 # additional SLAM-margin cell. Live costmap + exact Navfn, followed by TEB,
 # are the hard route and collision gates for every published goal.
-GLOBAL_FRONTIER_CLEARANCE: 0.35
+GLOBAL_FRONTIER_CLEARANCE: 0.45
 # Do not falsely terminate exploration at a narrow doorway. When no normal
 # strict route remains, recovery can use looser topology *between strict
 # endpoints* only after live costmap connectivity and exact Navfn validation.
@@ -468,7 +468,7 @@ GLOBAL_FRONTIER_ROOM_VIEW_CORE_DEG: 45.0
 GLOBAL_FRONTIER_ROOM_VIEW_ARC_DEG: 90.0
 # During ``entering`` sample only once the robot reached this signed depth along
 # the doorway normal (negative = still on the source side).
-GLOBAL_FRONTIER_ROOM_VIEW_MIN_DEPTH: -0.2
+GLOBAL_FRONTIER_ROOM_VIEW_MIN_DEPTH: -0.15
 # After a TEB pre-route turn completes, this is the time allowed for the base
 # to physically launch. It uses odometry translation (not SLAM-map distance),
 # then hands the route back to the normal 20-second stall watchdog. This avoids
@@ -516,15 +516,15 @@ GLOBAL_FRONTIER_REGION_MEMORY_RADIUS: 2.5
 # Minimum local unknown-cell change that counts as information progress while
 # the robot is still observing an open region.  It does not revive a dormant
 # region: a new run resets the static-map exploration memory.
-GLOBAL_FRONTIER_REGION_INFORMATION_DELTA: 24
+GLOBAL_FRONTIER_REGION_INFORMATION_DELTA: 8
 GLOBAL_FRONTIER_REGION_STAGNATION_TIMEOUT: 20.0
 GLOBAL_FRONTIER_REGION_FAILURE_LIMIT: 2
 # Indoor-search bias: frontiers near observed walls tend to be doors, corridor
 # turns, or rooms; a max-range boundary across an empty floor has little local
 # structure. These values guide coverage without using object coordinates.
-GLOBAL_FRONTIER_STRUCTURE_RADIUS_CELLS: 16
+GLOBAL_FRONTIER_STRUCTURE_RADIUS_CELLS: 10
 GLOBAL_FRONTIER_STRUCTURE_WEIGHT: 0.16
-GLOBAL_FRONTIER_MIN_STRUCTURE_CELLS: 5
+GLOBAL_FRONTIER_MIN_STRUCTURE_CELLS: 3
 # Soft heading-continuity cost for the online frontier scorer. A candidate
 # directly behind the robot pays up to 2 * this value; zero restores the
 # information/structure/path-only score. This does not forbid necessary turns.
@@ -547,8 +547,8 @@ GLOBAL_FRONTIER_ROOM_TURN_SOFT_LIMIT_DEG: 60.0
 # chair from the doorway).  Absolute value alone is not enough: the best
 # doorway must also beat the runner-up by MIN_MARGIN, otherwise a tie buys a
 # turn.
-GLOBAL_FRONTIER_HEADING_SEMANTIC_OVERRIDE_MIN_SCORE: 0.15
-GLOBAL_FRONTIER_HEADING_SEMANTIC_OVERRIDE_MIN_MARGIN: 0.40
+GLOBAL_FRONTIER_HEADING_SEMANTIC_OVERRIDE_MIN_SCORE: 0.06
+GLOBAL_FRONTIER_HEADING_SEMANTIC_OVERRIDE_MIN_MARGIN: 0.20
 # Dwell at the inside point before the U-turn so the detector sees the room
 # from a stable, inward-facing pose.  Kept below the 8-12 s auth budget.
 GLOBAL_FRONTIER_ROOM_SETTLE_SECONDS: 1.0
@@ -828,7 +828,7 @@ WDETECT_USE_FP16: true
 # Fixed TensorRT text-input capacity. Positive integer, and it must be at least
 # the number of unique target+environment prompt classes. Raising it requires
 # building a new engine; lowering it can make a task fail when prompts exceed it.
-WDETECT_TRT_MAX_CLASSES: 16
+WDETECT_TRT_MAX_CLASSES: 24
 
 # WeDetect scheduling, in seconds. SPIN_HZ is the ROS scheduler polling rate;
 # increasing it above real inference throughput does not make the model faster.
@@ -904,8 +904,8 @@ TARGET_EVAL_DETECTIONS_TOPIC: /lste/detections
 TARGET_EVAL_TARGET_LABELS: "yellow cup,yellow mug"
 # Target bounds in the Gazebo model frame. They approximate the physical cup
 # for spatial IoU evaluation; they never alter detector or controller boxes.
-TARGET_EVAL_TARGET_CENTER_M: "0,0,0.08"
-TARGET_EVAL_TARGET_SIZE_M: "0.12,0.12,0.16"
+TARGET_EVAL_TARGET_CENTER_M: "0,0,0.04"
+TARGET_EVAL_TARGET_SIZE_M: "0.12,0.09,0.08"
 # A frame is geometrically exposed when the projected bound overlaps the image,
 # its center lies beyond this edge margin, and its center depth is in range.
 TARGET_EVAL_MIN_DEPTH_M: 0.20
