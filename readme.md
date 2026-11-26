@@ -8,17 +8,19 @@
 
 `worlds/sim2real/real_lab.world` 基于实验室真实激光点云（`学校走廊_KILO.pcd`，1:1 比例对齐地面 `z = 0`）构建，保留了完整的“日”字型走廊与外围 8 间向外单出口房间（灰色走廊墙体 + 木纹房间墙体 + 深黑地面，共 41 个静态墙体 link，墙厚统一 `0.15 m`）。
 
-### 1.1 点云叠加与 Gazebo 多视角渲染
+### 1.1 点云叠加、家具平面规划与 Gazebo 多视角渲染
 
-![1:1 墙体与真实点云叠加校验图](docs/assets/real_lab/real_lab_pcd_overlay.png)
-
-| 正俯视全局图 | 三维斜俯视全局图 |
+| 1:1 墙体与真实点云叠加校验图 | 家具/目标/可行域平面规划图（出生点朝东 `yaw=0`） |
 | :---: | :---: |
-| ![Gazebo 正俯视全局图](docs/assets/real_lab/real_lab_gazebo_top.jpg) | ![Gazebo 三维斜俯视全局图](docs/assets/real_lab/real_lab_gazebo_iso.jpg) |
+| ![1:1 墙体与真实点云叠加校验图](docs/assets/real_lab/real_lab_pcd_overlay.png) | ![real_lab 家具与可行域平面规划图](docs/assets/real_lab/real_lab_enriched_plan.png) |
 
-| 西南对角透视图 | 中央连通走廊视角 | 走廊望向 E3 房间视角 |
+| Gazebo 全局俯视图 | 南走廊出生点朝东视角 | 东仓库 `E12` 门口视角 |
 | :---: | :---: | :---: |
-| ![Gazebo 西南对角三维透视图](docs/assets/real_lab/real_lab_gazebo_corner.jpg) | ![Gazebo 中央连通走廊视角](docs/assets/real_lab/real_lab_gazebo_corridor.jpg) | ![Gazebo 走廊望向 E3 门口视角](docs/assets/real_lab/real_lab_gazebo_room.jpg) |
+| ![Gazebo 全局俯视图](docs/assets/real_lab/shots_v5/cam_top_v5.png) | ![南走廊出生点视角](docs/assets/real_lab/shots_v5/cam_corr_spawn_v5.png) | ![E12 仓库门口视角](docs/assets/real_lab/shots_v5/cam_e12_door_v5.png) |
+
+| 目标房 `E3` 全景视角 | 目标工位近景（黄杯 + 台灯 + 绿植） | 诱导办公房 `S23` 门口视角 |
+| :---: | :---: | :---: |
+| ![E3 房间全景](docs/assets/real_lab/shots_v4/cam_e3_overview_v4.png) | ![E3 目标工位近景](docs/assets/real_lab/shots_v4/cam_e3_target_v4.png) | ![S23 诱导房门口视角](docs/assets/real_lab/shots_v2/cam_s23_door.png) |
 
 ### 1.2 场景关键几何规格
 

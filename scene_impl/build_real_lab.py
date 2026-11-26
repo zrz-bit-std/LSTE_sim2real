@@ -548,7 +548,7 @@ def render_plan(walls, objs, seen, grid_meta):
         fc, ec, zo = role_colors.get(role, ("#cccccc", "#333333", 4))
         ax.add_patch(Rectangle((a[0], a[1]), a[2] - a[0], a[3] - a[1], fc=fc, ec=ec, lw=0.8, alpha=0.9, zorder=zo))
 
-    ax.plot(SPAWN_XY[0], SPAWN_XY[1], marker="^", markersize=10, color="#00ff88", markeredgecolor="black", zorder=7)
+    ax.plot(SPAWN_XY[0], SPAWN_XY[1], marker=">", markersize=11, color="#00ff88", markeredgecolor="black", zorder=7)
     ax.text(SPAWN_XY[0], SPAWN_XY[1] - 0.58, f"SPAWN ({SPAWN_XY[0]:.1f},{SPAWN_XY[1]:.1f})",
             color="#00ff88", fontsize=8, ha="center", weight="bold", zorder=8)
     ax.plot(33.96, 14.66, marker="*", markersize=13, color="#ffd700", markeredgecolor="#d50000", zorder=8)

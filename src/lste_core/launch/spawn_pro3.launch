@@ -1,10 +1,10 @@
 <launch>
   <arg name="robot_name" default="pro3"/>
-  <arg name="x" default="20.0"/>
-  <arg name="y" default="-6.5"/>
+  <arg name="x" default="5.2"/>
+  <arg name="y" default="0.0"/>
   <arg name="z" default="0.1"/>
   <!-- +pi/2: Pro3 forward axis points along the world +Y axis. -->
-  <arg name="yaw" default="1.57079632679"/>
+  <arg name="yaw" default="0.0"/>
   <arg name="robot_description_path" default="$(find pja)/urdf/pro3.xacro"/>
   <arg name="benchmark_contact_sensor" default="false"/>
   <!-- 控制是否真的向 Gazebo spawn 模型，false 时仍然加载 robot_description + rsp -->

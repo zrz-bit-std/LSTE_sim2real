@@ -19,10 +19,10 @@
   <arg name="world_name" default="$(find lste_core)/../../worlds/sim2real/real_lab.world"/>
   <arg name="extra_gazebo_args" default=""/>
 
-  <arg name="x" default="20.0"/>
-  <arg name="y" default="-6.5"/>
+  <arg name="x" default="5.2"/>
+  <arg name="y" default="0.0"/>
   <arg name="z" default="0.1"/>
-  <arg name="yaw" default="1.57079632679"/>
+  <arg name="yaw" default="0.0"/>
 
   <include file="$(find lste_core)/launch/lab_world.launch">
     <arg name="gui" value="$(arg gui)"/>
