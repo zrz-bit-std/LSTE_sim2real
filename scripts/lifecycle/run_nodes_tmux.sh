@@ -48,7 +48,7 @@ _resolve() {
 
 # Provenance is resolved once before tmux panes begin. Navigation metrics uses
 # it to make two runs comparable without depending on shell history.
-WORLD=$(_resolve "${WORLD:-${CFG_WORLD:-worlds/place1.world}}")
+WORLD=$(_resolve "${WORLD:-${CFG_WORLD:-worlds/sim2real/real_lab.world}}")
 NAVIGATION_LOG_DIR=${NAVIGATION_LOG_DIR:-${CFG_NAVIGATION_LOG_DIR:-$WS/runtime/navigation/logs}}
 NAVIGATION_RUN_DIRECTORY=${NAVIGATION_RUN_DIRECTORY:-${CFG_NAVIGATION_RUN_DIRECTORY:-}}
 NAVIGATION_RUN_TIMESTAMP=${NAVIGATION_RUN_TIMESTAMP:-${CFG_NAVIGATION_RUN_TIMESTAMP:-}}

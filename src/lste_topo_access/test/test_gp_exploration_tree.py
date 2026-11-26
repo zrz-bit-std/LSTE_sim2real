@@ -363,4 +363,14 @@ class TreeTest(unittest.TestCase):
         t.observe((0,0),(0,0),shifted,2.,2,2,lambda a,b:math.dist(a,b)<.01)
         self.assertEqual(len(t.branches),4)
 
+
+    def test_narrow_single_door_crossing_allows_small_lateral_offset(self):
+        t = ExplorationTree()
+        p = proposal(0)
+        t.observe((0, 0), (0, 0), [p], 0, 1, 1)
+        t.branches[1]["map_geometry"] = {"width": 0.85}
+        t.dispatch(1, 1, (0, 0.10))
+        self.assertTrue(t.arrived(1, (1.5, 0.10), required_depth=0.35))
+        self.assertTrue(t.branches[1].get("gate_crossed", False))
+
 if __name__=='__main__':unittest.main()

@@ -13,7 +13,10 @@
   <arg name="costmap_updates_topic" default="/move_base/global_costmap/costmap_updates"/>
   <!-- Extend the online map for long single-test corridors whose spawn
        pose is west of the production environment window. -->
-  <arg name="map_xmin" default="-3.0"/>
+  <arg name="map_xmin" default="-14.0"/>
+  <arg name="map_xmax" default="40.0"/>
+  <arg name="map_ymin" default="-11.0"/>
+  <arg name="map_ymax" default="23.0"/>
   <arg name="costmap_max_age" default="3.0"/>
   <arg name="costmap_stationary_pose_epsilon" default="0.01"/>
   <!-- Connectivity validation is throttled because the rolling local
@@ -54,19 +57,19 @@
   <!-- Route-safe clearance: 0.30 m robot radius + 0.22 m TEB minimum
        obstacle distance. Frontier cells themselves may be closer; the node
        publishes a safe approach point instead of the boundary cell. -->
-  <arg name="clearance" default="0.52"/>
+  <arg name="clearance" default="0.35"/>
   <!-- Must match TebLocalPlannerROS/xy_goal_tolerance. Portal endpoints are
        positioned beyond this success circle, so a TEB SUCCEEDED terminal is
        still provably on the destination side of the door. Keeping the value
        in this launch contract avoids depending on process start order. -->
-  <arg name="teb_xy_goal_tolerance" default="0.50"/>
+  <arg name="teb_xy_goal_tolerance" default="0.35"/>
   <!-- Strict clearance is the normal complete route topology. Recovery may
        use loose topology only between strict-clearance endpoints; the live
        costmap and exact Navfn plan remain hard executability gates. -->
   <arg name="navfn_observation_recovery_enabled" default="true"/>
   <!-- This is only the loose topology used to detect information boundaries;
        it never authorizes a wall-adjacent action endpoint. -->
-  <arg name="fallback_clearance" default="0.30"/>
+  <arg name="fallback_clearance" default="0.25"/>
   <arg name="frontier_approach_distance" default="1.0"/>
   <arg name="min_path_distance" default="1.2"/>
   <!-- Retained for launch compatibility; the explorer now publishes the
@@ -95,7 +98,7 @@
   <arg name="portal_authentication_retry_cooldown" default="5.0"/>
   <arg name="room_view_core_deg" default="45.0"/>
   <arg name="room_view_arc_deg" default="90.0"/>
-  <arg name="room_view_min_depth" default="-0.3"/>
+  <arg name="room_view_min_depth" default="-0.2"/>
   <!-- A zero-information endpoint that stays gainless this long is a dead
        end; fail its region and force a different obligation instead of
        retaining the route until a terminal that may never arrive. -->
@@ -122,7 +125,7 @@
        would gate every successor planning cycle. Route health budgets stay
        in simulation time; this only bounds the handshake. -->
   <arg name="controller_release_ack_wall_seconds" default="30.0"/>
-  <arg name="completed_radius" default="1.25"/>
+  <arg name="completed_radius" default="0.95"/>
   <!-- Stage-2 child-Place veto for a wide cut whose two wall tangents are
        both perpendicular to the gate section.  The report-only diagnostic is
        always emitted; this switch only prevents the suspect cut from
@@ -142,14 +145,15 @@
        A dormant region stays excluded for this SLAM invocation: boundary
        jitter alone is not valid evidence that a room became unexplored again. -->
   <arg name="region_memory_radius" default="2.5"/>
-  <arg name="region_information_delta" default="8"/>
+  <arg name="region_information_delta" default="24"/>
   <!-- This is a no-information dwell bound, not a route timeout. The normal
        active/stall watchdog still owns blocked or non-executable paths. -->
   <arg name="region_stagnation_timeout" default="12.0"/>
   <arg name="region_failure_limit" default="2"/>
-  <arg name="structure_radius_cells" default="10"/>
+  <arg name="info_radius_cells" default="16"/>
+  <arg name="structure_radius_cells" default="16"/>
   <arg name="structure_weight" default="0.16"/>
-  <arg name="min_structure_cells" default="3"/>
+  <arg name="min_structure_cells" default="5"/>
   <!-- Soft preference for candidates near the robot's current heading.
        Larger values reduce abrupt branch U-turns; zero restores the old
        information/structure/path-only score. -->
@@ -188,7 +192,7 @@
        unknown remains within dead_end_unknown_cells of the frontier cell, the
        route ends at a resolved wall.  Mark it inspected and pick a passage. -->
   <arg name="dead_end_check_distance" default="4.0"/>
-  <arg name="dead_end_unknown_cells" default="15"/>
+  <arg name="dead_end_unknown_cells" default="30"/>
   <!-- Do not rebuild the expensive map/costmap BFS while a healthy active
        route is far from its frontier. Near-endpoint and stall checks wake it
        immediately. -->
@@ -206,13 +210,14 @@
     <param name="linearUpdate" value="0.15"/>
     <param name="angularUpdate" value="0.15"/>
     <param name="maxUrange" value="10.0"/>
-    <!-- env04 occupies roughly x=[-2, 25], y=[-15, 7]. At 10 cm this keeps
-         the Python connected-frontier search below 80k cells per cycle. -->
-    <param name="delta" value="0.10"/>
+    <!-- real_lab.world occupies roughly x=[-11.7, 37.8], y=[-9.1, 21.0]
+         with 0.85-0.90 m single doors. Use 5 cm cells so narrow doors stay
+         16-18 cells wide after SLAM quantization. -->
+    <param name="delta" value="0.05"/>
     <param name="xmin" value="$(arg map_xmin)"/>
-    <param name="xmax" value="27.0"/>
-    <param name="ymin" value="-16.0"/>
-    <param name="ymax" value="9.0"/>
+    <param name="xmax" value="$(arg map_xmax)"/>
+    <param name="ymin" value="$(arg map_ymin)"/>
+    <param name="ymax" value="$(arg map_ymax)"/>
   </node>
 
   <node if="$(arg start_frontier)" pkg="lste_topo_access" type="lste_global_frontier_node.py" name="lste_global_frontier" output="screen" launch-prefix="$(optenv LSTE_FRONTIER_LAUNCH_PREFIX)">
@@ -284,6 +289,7 @@
     <param name="region_information_delta" value="$(arg region_information_delta)"/>
     <param name="region_stagnation_timeout" value="$(arg region_stagnation_timeout)"/>
     <param name="region_failure_limit" value="$(arg region_failure_limit)"/>
+    <param name="info_radius_cells" value="$(arg info_radius_cells)"/>
     <param name="structure_radius_cells" value="$(arg structure_radius_cells)"/>
     <param name="structure_weight" value="$(arg structure_weight)"/>
     <param name="min_structure_cells" value="$(arg min_structure_cells)"/>

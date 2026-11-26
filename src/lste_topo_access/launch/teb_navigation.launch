@@ -10,7 +10,7 @@
   <arg name="odom_topic" default="/pro3/wheel_odom"/>
   <arg name="global_frame" default="map"/>
   <arg name="max_linear_speed" default="0.60"/>
-  <arg name="teb_xy_goal_tolerance" default="0.50"/>
+  <arg name="teb_xy_goal_tolerance" default="0.35"/>
   <arg name="controller_mode" default="teb"/>
   <arg name="goal_topic" default="/lste/final_goal"/>
   <arg name="intent_topic" default="/lste/goal_intent"/>
@@ -273,8 +273,8 @@
     <param name="global_costmap/static_map" value="true"/>
     <param name="global_costmap/track_unknown_space" value="true"/>
     <param name="global_costmap/unknown_cost_value" value="-1"/>
-    <param name="global_costmap/robot_radius" value="0.30"/>
-    <param name="global_costmap/inflation_radius" value="0.70"/>
+    <param name="global_costmap/robot_radius" value="0.25"/>
+    <param name="global_costmap/inflation_radius" value="0.45"/>
     <param name="global_costmap/cost_scaling_factor" value="5.0"/>
 
     <param name="NavfnROS/allow_unknown" value="$(arg navfn_allow_unknown)"/>
@@ -293,11 +293,11 @@
     <param name="local_costmap/rolling_window" value="true"/>
     <param name="local_costmap/width" value="8.0"/>
     <param name="local_costmap/height" value="8.0"/>
-    <param name="local_costmap/resolution" value="0.10"/>
-    <param name="local_costmap/robot_radius" value="0.30"/>
-    <!-- Keep the physical footprint (0.30 m) hard, but avoid a second very
-         large local inflation band that turns a valid doorway into a stop. -->
-    <param name="local_costmap/inflation_radius" value="0.55"/>
+    <param name="local_costmap/resolution" value="0.05"/>
+    <param name="local_costmap/robot_radius" value="0.25"/>
+    <!-- Keep the physical footprint (0.25 m, matching pro3 0.35x0.35 m box)
+         hard, with a compact inflation band (<0.425 m) for 0.85 m doors. -->
+    <param name="local_costmap/inflation_radius" value="0.40"/>
     <param name="local_costmap/cost_scaling_factor" value="3.0"/>
     <param name="local_costmap/obstacle_layer/observation_sources" value="laser"/>
     <param name="local_costmap/obstacle_layer/laser/data_type" value="LaserScan"/>
@@ -363,7 +363,7 @@
          steering corrections.  Keeping the route tangent (via overwrite
          orientation) while loosening the intermediate-point pull removes the
          wobble without losing the global direction. -->
-    <param name="TebLocalPlannerROS/global_plan_viapoint_sep" value="0.60"/>
+    <param name="TebLocalPlannerROS/global_plan_viapoint_sep" value="0.40"/>
     <param name="TebLocalPlannerROS/weight_viapoint" value="0.50"/>
     <param name="TebLocalPlannerROS/weight_optimaltime" value="0.60"/>
     <!-- Stronger angular-acceleration penalty: TEB re-optimises against a
@@ -401,8 +401,8 @@
     <!-- Short visual/frontier segments should not force a full stop at every
          handoff. The task_done mux gate still performs the final stop. -->
     <param name="TebLocalPlannerROS/free_goal_vel" value="true"/>
-    <param name="TebLocalPlannerROS/min_obstacle_dist" value="0.22"/>
-    <param name="TebLocalPlannerROS/inflation_dist" value="0.55"/>
+    <param name="TebLocalPlannerROS/min_obstacle_dist" value="0.10"/>
+    <param name="TebLocalPlannerROS/inflation_dist" value="0.30"/>
     <!-- Official TEB velocity limiter: slow continuously near furniture,
          instead of waiting for the hard obstacle constraint to force a
          full-speed-to-zero transition. It does not weaken min_obstacle_dist.
@@ -412,8 +412,8 @@
          "dove" into the wall before the goal switch stopped it.  The 0.40
          floor keeps the final approach a gentle ramp. -->
     <param name="TebLocalPlannerROS/obstacle_proximity_ratio_max_vel" value="0.40"/>
-    <param name="TebLocalPlannerROS/obstacle_proximity_lower_bound" value="0.35"/>
-    <param name="TebLocalPlannerROS/obstacle_proximity_upper_bound" value="1.20"/>
+    <param name="TebLocalPlannerROS/obstacle_proximity_lower_bound" value="0.20"/>
+    <param name="TebLocalPlannerROS/obstacle_proximity_upper_bound" value="0.80"/>
     <param name="TebLocalPlannerROS/include_costmap_obstacles" value="$(arg teb_include_costmap_obstacles)"/>
     <param name="TebLocalPlannerROS/include_dynamic_obstacles" value="false"/>
     <!-- Static indoor geometry is represented as clustered convex obstacles
@@ -448,7 +448,7 @@
     <param name="TebLocalPlannerROS/weight_obstacle" value="45.0"/>
     <param name="TebLocalPlannerROS/weight_inflation" value="0.20"/>
     <param name="TebLocalPlannerROS/footprint_model/type" value="circular"/>
-    <param name="TebLocalPlannerROS/footprint_model/radius" value="0.30"/>
+    <param name="TebLocalPlannerROS/footprint_model/radius" value="0.25"/>
     <param name="TebLocalPlannerROS/publish_feedback" value="true"/>
   </node>
 

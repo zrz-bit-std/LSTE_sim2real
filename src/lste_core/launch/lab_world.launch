@@ -3,7 +3,7 @@
   <arg name="gui" default="true"/>
   <arg name="gui_plugin" default="$(find gazebo_click_point)/../../devel/lib/libgazebo_click_point.so"/>
   <!-- 默认 world 路径相对工作区，可通过上层传 world_name 覆盖 -->
-  <arg name="world_name" default="$(find lste_core)/../../worlds/lab_building.world"/>
+  <arg name="world_name" default="$(find lste_core)/../../worlds/sim2real/real_lab.world"/>
   <arg name="extra_gazebo_args" default=""/>
 
   <env name="GAZEBO_MODEL_PATH"

@@ -44,7 +44,7 @@ _resolve() {
   fi
 }
 
-WORLD=${WORLD:-$(_resolve "${CFG_WORLD:-worlds/place1.world}")}
+WORLD=${WORLD:-$(_resolve "${CFG_WORLD:-worlds/sim2real/real_lab.world}")}
 # Software rendering remains the portable default; a local display with a
 # working hardware GL context can opt out without changing the experiment.
 GAZEBO_SOFTWARE_RENDERING=${GAZEBO_SOFTWARE_RENDERING:-${CFG_GAZEBO_SOFTWARE_RENDERING:-1}}
@@ -162,7 +162,7 @@ echo "[env] roscore ready"
 
 WAIT_ROSCORE='until rostopic list >/dev/null 2>&1; do echo \"waiting for roscore...\"; sleep 1; done'
 
-# Window 1: Gazebo 场景（不含 pro3，用 _no_pro3.world）
+# Window 1: Gazebo 场景（仅使用 worlds/sim2real/real_lab.world，不含 pro3）
 # Keep each launch argument as a single shell word.  In particular,
 # ``extra_gazebo_args`` may be "--seed N"; interpolating it into the tmux
 # command used to split it into two roslaunch arguments and leave runall

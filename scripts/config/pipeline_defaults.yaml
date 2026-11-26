@@ -4,7 +4,7 @@
 
 # Simulation world and task. Change all three together when evaluating another
 # scene/task. TASK_ID must exist in TASK_JSON.
-WORLD: worlds/topo3.0_catch_mode/session_test/env04_no_pro3.world
+WORLD: worlds/sim2real/real_lab.world
 TASK_JSON: model/Data_exchange/vlm_prompt/lab/yellow_cup.json
 TASK_ID: yellow_cup
 
@@ -391,7 +391,7 @@ GLOBAL_FRONTIER_PREEMPT_CONTEXT: false
 # robot radius (0.30 m) plus TEB's minimum obstacle distance (0.22 m), with an
 # additional SLAM-margin cell. Live costmap + exact Navfn, followed by TEB,
 # are the hard route and collision gates for every published goal.
-GLOBAL_FRONTIER_CLEARANCE: 0.62
+GLOBAL_FRONTIER_CLEARANCE: 0.35
 # Do not falsely terminate exploration at a narrow doorway. When no normal
 # strict route remains, recovery can use looser topology *between strict
 # endpoints* only after live costmap connectivity and exact Navfn validation.
@@ -404,8 +404,8 @@ GLOBAL_FRONTIER_NAVFN_OBSERVATION_RECOVERY_ENABLED: true
 # point after costmap and Navfn both approve it. The approach point is within
 # GLOBAL_FRONTIER_APPROACH_DISTANCE of that boundary, so the lidar can expose
 # a doorway before the robot attempts to cross it.
-GLOBAL_FRONTIER_FALLBACK_CLEARANCE: 0.30
-GLOBAL_FRONTIER_APPROACH_DISTANCE: 1.5
+GLOBAL_FRONTIER_FALLBACK_CLEARANCE: 0.25
+GLOBAL_FRONTIER_APPROACH_DISTANCE: 1.0
 GLOBAL_FRONTIER_MIN_PATH_DISTANCE: 1.2
 # Turn ownership for online frontier routes:
 #   native_teb       - default. One TEB trajectory owns bends and in-place
@@ -468,7 +468,7 @@ GLOBAL_FRONTIER_ROOM_VIEW_CORE_DEG: 45.0
 GLOBAL_FRONTIER_ROOM_VIEW_ARC_DEG: 90.0
 # During ``entering`` sample only once the robot reached this signed depth along
 # the doorway normal (negative = still on the source side).
-GLOBAL_FRONTIER_ROOM_VIEW_MIN_DEPTH: -0.3
+GLOBAL_FRONTIER_ROOM_VIEW_MIN_DEPTH: -0.2
 # After a TEB pre-route turn completes, this is the time allowed for the base
 # to physically launch. It uses odometry translation (not SLAM-map distance),
 # then hands the route back to the normal 20-second stall watchdog. This avoids
@@ -484,7 +484,7 @@ GLOBAL_FRONTIER_REJECTED_TIMEOUT: 180.0
 # Radius around a reached frontier remembered for the full task. This prevents
 # the explorer from revisiting an already inspected doorway after its short
 # temporary-stall retry timeout has expired.
-GLOBAL_FRONTIER_COMPLETED_RADIUS: 1.25
+GLOBAL_FRONTIER_COMPLETED_RADIUS: 0.95
 # Stage-2 child-Place veto for the wide, double-perpendicular cut reported by
 # portal_cut_suspect_diagnostic.  The diagnostic remains report-only; this
 # switch only stops the suspect cut from allocating a new child Place.
@@ -512,19 +512,19 @@ GAZEBO_RANDOM_SEED: ""
 # region memory visits new observation regions before revisits. A region turns
 # dormant after no local unknown-space progress or two failed routes, and it
 # can reactivate only when new unknown evidence appears.
-GLOBAL_FRONTIER_REGION_MEMORY_RADIUS: 3.0
+GLOBAL_FRONTIER_REGION_MEMORY_RADIUS: 2.5
 # Minimum local unknown-cell change that counts as information progress while
 # the robot is still observing an open region.  It does not revive a dormant
 # region: a new run resets the static-map exploration memory.
-GLOBAL_FRONTIER_REGION_INFORMATION_DELTA: 8
+GLOBAL_FRONTIER_REGION_INFORMATION_DELTA: 24
 GLOBAL_FRONTIER_REGION_STAGNATION_TIMEOUT: 20.0
 GLOBAL_FRONTIER_REGION_FAILURE_LIMIT: 2
 # Indoor-search bias: frontiers near observed walls tend to be doors, corridor
 # turns, or rooms; a max-range boundary across an empty floor has little local
 # structure. These values guide coverage without using object coordinates.
-GLOBAL_FRONTIER_STRUCTURE_RADIUS_CELLS: 10
+GLOBAL_FRONTIER_STRUCTURE_RADIUS_CELLS: 16
 GLOBAL_FRONTIER_STRUCTURE_WEIGHT: 0.16
-GLOBAL_FRONTIER_MIN_STRUCTURE_CELLS: 3
+GLOBAL_FRONTIER_MIN_STRUCTURE_CELLS: 5
 # Soft heading-continuity cost for the online frontier scorer. A candidate
 # directly behind the robot pays up to 2 * this value; zero restores the
 # information/structure/path-only score. This does not forbid necessary turns.
@@ -691,7 +691,7 @@ SAPPO_BOUNDARY_PROGRESS_MARGIN: 0.45
 # Bug2 wall-follow feedback. The controller keeps the selected side about
 # 0.72 m from the lidar contour and steers from the front/rear range slope;
 # this avoids the old fixed-heading drift around corners.
-SAPPO_BOUNDARY_WALL_DISTANCE: 0.72
+SAPPO_BOUNDARY_WALL_DISTANCE: 0.55
 # Ignore side/front/rear lidar endpoints beyond this range when estimating the
 # contour. A missing wall must release Bug2 instead of using a stale far wall.
 SAPPO_BOUNDARY_WALL_MAX_RANGE: 1.80
@@ -717,12 +717,12 @@ SAPPO_WAYPOINT_SWITCH_DISTANCE: 0.75
 # Local grid inflation is separate from the hard rollout safety margin. The
 # 0.48m radius keeps a 0.30m robot plus a small mapping buffer without making
 # ordinary corridors appear topologically closed.
-SAPPO_GRID_OBSTACLE_RADIUS: 0.48
-SAPPO_GRID_EDGE_CLEARANCE: 0.42
+SAPPO_GRID_OBSTACLE_RADIUS: 0.35
+SAPPO_GRID_EDGE_CLEARANCE: 0.32
 # If a requested turn is made with a wall already inside this clearance,
 # enter wall-follow recovery rather than repeatedly rotating toward an
 # occluded goal. Increase only when the robot has a larger footprint.
-SAPPO_REORIENT_OBSTACLE_CLEARANCE: 0.72
+SAPPO_REORIENT_OBSTACLE_CLEARANCE: 0.55
 # SA-PPO considers a waypoint reached inside this radius. Keep it below the
 # 1.0m target visual-servo step; otherwise the controller can terminate after
 # only a few centimetres and never approach a small distant object.
@@ -738,7 +738,7 @@ TEB_MAX_LINEAR_SPEED: 0.50
 # Keep Global Frontier's portal endpoint envelope identical to TEB's success
 # circle. Benchmark overlays may widen this only for a measured narrow-portal
 # geometry stall; production retains the conservative 0.50 m default.
-TEB_XY_GOAL_TOLERANCE: 0.50
+TEB_XY_GOAL_TOLERANCE: 0.35
 # Evaluate distinct local route topologies (for example, pass an obstacle on
 # its left or right) instead of optimizing only one elastic band inherited
 # from Navfn. It is retained for controlled experiments, but stays off by
@@ -776,7 +776,7 @@ TEB_ANGULAR_DEADBAND: 0.02
 # DECEL is the achievable braking deceleration; MIN_GAP the closest distance
 # the robot is allowed to reach; MAX_SPEED the ceiling (normally TEB max).
 MUX_GOVERNOR_DECEL: 0.60
-MUX_GOVERNOR_MIN_GAP: 0.45
+MUX_GOVERNOR_MIN_GAP: 0.30
 MUX_GOVERNOR_MAX_SPEED: 0.50
 # Select exactly one detector profile. This is the only key needed to change
 # detector model:

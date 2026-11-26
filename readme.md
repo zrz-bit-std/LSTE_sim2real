@@ -1,6 +1,6 @@
 # LSTE：视觉目标搜索与自主导航
 
-LSTE 在 Gazebo 场景中驱动 Pro3 机器人，根据任务中的目标描述自主探索、识别目标、接近并确认完成。本地已完成一次 `env04_no_pro3.world` 中寻找 `yellow_cup` 的端到端实验，成功记录为 **`20261014_221223`**。
+LSTE 在 Gazebo 场景中驱动 Pro3 机器人，根据任务中的目标描述自主探索、识别目标、接近并确认完成。当前仓库已切换为专攻 `worlds/sim2real/real_lab.world` 场景（原仓库曾在 `env04_no_pro3.world` 中完成 `yellow_cup` 端到端实验 `20261014_221223`）。
 
 本文记录复现过程、系统设计和实验操作，不展开依赖安装与环境搭建。所有命令默认在工作区根目录执行。
 
@@ -52,7 +52,7 @@ Navigation Metrics 旁路记录上述过程 → 实验日志 → 离线可视化
 统一修改 [scripts/config/pipeline_defaults.yaml](scripts/config/pipeline_defaults.yaml)。当前对应成功实验场景的主要值为：
 
 ```yaml
-WORLD: worlds/topo3.0_catch_mode/session_test/env04_no_pro3.world
+WORLD: worlds/sim2real/real_lab.world
 TASK_JSON: model/Data_exchange/vlm_prompt/lab/yellow_cup.json
 TASK_ID: yellow_cup
 
@@ -190,7 +190,7 @@ runtime/navigation/logs/<YYYYMMDD_HHMMSS>/
 cd /home/zrz/work/lste_ws
 python3 scripts/tools/plot_world_run.py \
   runtime/navigation/logs/20261014_221223/20261014_221223_navigation_metrics.log \
-  --world worlds/topo3.0_catch_mode/session_test/env04_no_pro3.world \
+  --world worlds/sim2real/real_lab.world \
   --output-dir runtime/navigation/logs/20261014_221223/visualization
 ```
 

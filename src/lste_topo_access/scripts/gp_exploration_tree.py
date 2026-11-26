@@ -375,7 +375,7 @@ class ExplorationTree:
                 lateral=abs(-(crossing[0]-gate[0])*math.sin(branch['heading'])+
                              (crossing[1]-gate[1])*math.cos(branch['heading']))
                 width=(branch.get('map_geometry') or {}).get('width')
-                if width is not None and lateral<=max(0.,width/2-required_depth):
+                if width is not None and lateral<=max(0.,width/2-min(0.5*required_depth,0.20)):
                     branch['gate_crossed']=True
                     branch['crossing_xy']=list(crossing)
         branch['last_physical_pose']=list(physical_xy)

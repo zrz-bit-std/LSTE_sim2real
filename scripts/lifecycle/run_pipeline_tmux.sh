@@ -45,7 +45,7 @@ _resolve() {
   fi
 }
 
-WORLD=${WORLD:-$(_resolve "${CFG_WORLD:-worlds/place1.world}")}
+WORLD=${WORLD:-$(_resolve "${CFG_WORLD:-worlds/sim2real/real_lab.world}")}
 TASK_JSON_VALUE=${TASK_JSON:-${CFG_TASK_JSON:-}}
 TASK_ID=${TASK_ID:-${CFG_TASK_ID:-}}
 if [[ -z "$TASK_JSON_VALUE" || -z "$TASK_ID" ]]; then

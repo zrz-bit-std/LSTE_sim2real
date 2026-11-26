@@ -32,9 +32,9 @@ class TebStallPlannerContractTest(unittest.TestCase):
         self.assertEqual(self.param("TebLocalPlannerROS/viapoints_all_candidates"), "false")
 
     def test_recovery_does_not_weaken_collision_or_reverse_limits(self):
-        self.assertEqual(self.param("TebLocalPlannerROS/footprint_model/radius"), "0.30")
-        self.assertEqual(self.param("TebLocalPlannerROS/min_obstacle_dist"), "0.22")
-        self.assertEqual(self.param("TebLocalPlannerROS/inflation_dist"), "0.55")
+        self.assertEqual(self.param("TebLocalPlannerROS/footprint_model/radius"), "0.25")
+        self.assertEqual(self.param("TebLocalPlannerROS/min_obstacle_dist"), "0.10")
+        self.assertEqual(self.param("TebLocalPlannerROS/inflation_dist"), "0.30")
         self.assertEqual(self.param("TebLocalPlannerROS/max_vel_x_backwards"), "0.01")
         self.assertEqual(self.param("TebLocalPlannerROS/feasibility_check_no_poses"), "3")
 
